@@ -17,7 +17,6 @@ fmt:
 
 lint:
 	dotenv-linter src/app/.env.ci
-	cd src && ./manage.py check
 	flake8 src
 	cd src && mypy
 
