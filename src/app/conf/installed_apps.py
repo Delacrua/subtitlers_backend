@@ -1,9 +1,20 @@
 # Application definition
 
+
+DEFAULT_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+]
+
 APPS = [
     "app",
     "a12n",
     "users",
+    "subtitles",
 ]
 
 THIRD_PARTY_APPS = [
@@ -14,12 +25,6 @@ THIRD_PARTY_APPS = [
     "rest_framework_jwt.blacklist",
     "django_filters",
     "axes",
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
 ]
 
-INSTALLED_APPS = APPS + THIRD_PARTY_APPS
+INSTALLED_APPS = DEFAULT_APPS + APPS + THIRD_PARTY_APPS
