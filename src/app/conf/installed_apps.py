@@ -14,7 +14,7 @@ APPS = [
     "app",
     "a12n",
     "users",
-    "subtitler",
+    "subtitles",
 ]
 
 THIRD_PARTY_APPS = [
