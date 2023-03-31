@@ -3,3 +3,6 @@ static/
 .circleci/
 db.sqlite
 __pycache__/
+htmlcov/
+.mypy_cache
+

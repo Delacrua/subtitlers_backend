@@ -1,0 +1,41 @@
+version: '3.9'
+
+volumes:
+  pgdata:
+
+services:
+  web:
+    container_name: subtitler-api-local
+    restart: unless-stopped
+    build:
+      context: ./src
+      args:
+        REQUIREMENTS_FILE: dev-requirements.txt
+    volumes:
+      - ./src:/src
+    ports:
+        - "8000:8000"
+    depends_on:
+        - postgres
+    environment:
+      - DEBUG=On
+      - SECRET_KEY=MyNotSoSecretKey
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/subtitler
+      - DJANGO_SUPERUSER_USERNAME=admin
+      - DJANGO_SUPERUSER_email=admin@admin.com
+      - DJANGO_SUPERUSER_PASSWORD=admin
+    command: >
+        sh -c "python manage.py runserver 0.0.0.0:8000"
+
+  postgres:
+    container_name: subtitler-database-local
+    restart: unless-stopped
+    image: postgres:14.6-alpine
+    environment:
+      - POSTGRES_DB=subtitler
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    expose:
+      - 5432

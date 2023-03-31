@@ -1,0 +1,53 @@
+name: Subtitler preview CI/CD
+
+on: [pull_request]
+
+env:
+  ENVIRONMENT: ${{ github.base_ref }}
+  PROJECT: subtitler-api-${{ github.base_ref }}
+
+jobs:
+   preview_and_tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+      checks: write
+      pull-requests: write
+    if: github.base_ref == 'dev'
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .env variables
+      run: |
+        echo POSTGRES_DB="${{ secrets.POSTGRES_DB }}" > .env
+        echo POSTGRES_USER="${{ secrets.POSTGRES_USER }}" >> .env
+        echo POSTGRES_PASSWORD="${{ secrets.POSTGRES_PASSWORD }}" >> .env
+        echo DATABASE_URL="${{ secrets.DATABASE_URL }}" >> .env
+        echo SECRET_KEY="${{ secrets.SECRET_KEY }}" >> .env
+        echo DJANGO_SUPERUSER_USERNAME="${{ secrets.DJANGO_SUPERUSER_USERNAME }}" >> .env
+        echo DJANGO_SUPERUSER_EMAIL="${{ secrets.DJANGO_SUPERUSER_EMAIL }}" >> .env
+        echo DJANGO_SUPERUSER_PASSWORD="${{ secrets.DJANGO_SUPERUSER_PASSWORD }}" >> .env
+        echo DEBUG="${{ secrets.DEBUG }}" >> .env
+
+    - name: Build docker image
+      run: docker compose -f docker-compose.$ENVIRONMENT.yml -p $PROJECT build
+
+    - name: Run docker container
+      run: docker compose -f docker-compose.$ENVIRONMENT.yml -p $PROJECT up -d
+
+    - name: Run Tests
+      run: |
+        docker volume create tests
+        docker compose -f docker-compose.$ENVIRONMENT.yml -p $PROJECT run --entrypoint="" -v $(pwd)/src:/src web sh -c 'coverage run -m pytest && coverage xml'
+
+    - name: Copy Test Results
+      run: |
+        cp src/coverage.xml .
+        ls -la 
+
+    - name: Publish Test Results
+      uses: orgoro/coverage@v3
+      with:
+          coverageFile: coverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
