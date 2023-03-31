@@ -1,3 +1,14 @@
+dev-build:
+	docker compose -f docker-compose.dev.yml build
+dev-up:
+	docker compose -f docker-compose.dev.yml up
+dev-up-d:
+	docker compose -f docker-compose.dev.yml up -d
+dev-down:
+	docker compose -f docker-compose.dev.yml down
+dev-test:
+	docker compose -f docker-compose.dev.yml run web sh -c 'pytest'
+
 install-dev-deps: dev-deps
 	pip-sync requirements.txt dev-requirements.txt
 
@@ -17,6 +28,7 @@ fmt:
 
 lint:
 	dotenv-linter src/app/.env.ci
+	cd src && python manage.py check
 	flake8 src
 	cd src && mypy
 
@@ -26,3 +38,11 @@ test:
 	cd src && python manage.py compilemessages
 	cd src && pytest --dead-fixtures
 	cd src && pytest -x
+
+coverage:
+	mkdir -p src/app/static
+	cd src && python manage.py makemigrations --dry-run --no-input --check
+	cd src && python manage.py compilemessages
+	cd src && pytest --dead-fixtures
+	cd src && coverage run -m pytest
+	cd src && coverage html
