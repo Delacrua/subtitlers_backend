@@ -1,10 +1,12 @@
 [project]
-name = "subtitlers_backend"
+name = "subtitler-backend"
 version = "0.0.0-dev"
 dependencies = [
-    "Django<3.3",
+    "Django>=4.1.7",
     "bcrypt",
     "django-behaviors",
+    "django-cors-headers",
+    "django-debug-toolbar",
     "django-environ",
     "django-ipware",
     "django-axes",
@@ -27,6 +29,8 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "ipython",
+
+    "coverage",
 
     "pytest-django>=3.9",
     "pytest-deadfixtures",
@@ -75,7 +79,7 @@ dev = [
 
 
 [tool.flake8]
-max-line-length = 160
+max-line-length = 120
 inline-quotes = "\""
 ignore = [
     "DJ05",  # URLs include() should set a namespace
@@ -98,7 +102,7 @@ exclude = [
 
 [tool.isort]
 profile = "google"
-line_length = 160
+line_length = 120
 extra_standard_library = ["pytest"]
 known_django = ["django", "restframework"]
 sections = ["FUTURE", "STDLIB", "THIRDPARTY", "DJANGO", "FIRSTPARTY", "LOCALFOLDER"]
@@ -113,7 +117,7 @@ exclude = '''
   | migrations
 )/
 '''
-line_length = 160
+line_length = 120
 
 
 [tool.pytest.ini_options]
@@ -126,6 +130,7 @@ line_length = 160
  filterwarnings = [  # Pattern: `action:message:category:module:line` (https://docs.python.org/3/library/warnings.html#describing-warning-filters)
    "ignore:.*'rest_framework_jwt.blacklist' defines default_app_config.*You can remove default_app_config.::django",
    "ignore:distutils Version classes are deprecated. Use packaging.version instead.:DeprecationWarning:pytest_freezegun:17",
+   "ignore:The USE_L10N setting is deprecated.::django",
  ]
  env = [
    "CI=1",

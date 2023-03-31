@@ -1,5 +1,5 @@
 # Application definition
-
+from app.conf.environ import env
 
 DEFAULT_APPS = [
     "django.contrib.admin",
@@ -14,7 +14,7 @@ APPS = [
     "app",
     "a12n",
     "users",
-    "subtitles",
+    "subtitler",
 ]
 
 THIRD_PARTY_APPS = [
@@ -25,6 +25,10 @@ THIRD_PARTY_APPS = [
     "rest_framework_jwt.blacklist",
     "django_filters",
     "axes",
+    "corsheaders",
 ]
+
+if env("DEBUG", cast=bool, default=False):
+    THIRD_PARTY_APPS.append("debug_toolbar")
 
 INSTALLED_APPS = DEFAULT_APPS + APPS + THIRD_PARTY_APPS
