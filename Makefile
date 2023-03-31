@@ -46,3 +46,6 @@ coverage:
 	cd src && pytest --dead-fixtures
 	cd src && coverage run -m pytest
 	cd src && coverage html
+
+migrations:
+	cd src && python manage.py makemigrations
