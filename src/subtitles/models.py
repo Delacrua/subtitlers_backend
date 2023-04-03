@@ -1,6 +1,3 @@
-import datetime
-
-from django.core import validators
 from django.db import models
 
 from subtitles import definitions
@@ -47,14 +44,20 @@ class Series(models.Model):
     poster = models.ImageField(blank=True, null=True)
     description = models.CharField(max_length=255, blank=True)
 
+    def __str__(self):
+        return self.title
+
 
 class Season(models.Model):
-    series = models.ForeignKey(Series, related_name="seasons", on_delete=models.CASCADE)
     season_number = models.PositiveIntegerField(blank=True)
+    series = models.ForeignKey(Series, related_name="seasons", on_delete=models.CASCADE)
     number_of_episodes = models.PositiveIntegerField(blank=True)
     released = models.PositiveIntegerField(blank=True)
     ended = models.PositiveIntegerField(blank=True)
     description = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return f"{self.series} - season {self.season_number}"
 
 
 class Episode(models.Model):
@@ -70,3 +73,29 @@ class Episode(models.Model):
     uncommon_words = models.JSONField(blank=True, null=True)
     words_count = models.JSONField(blank=True, null=True)
     questions = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.season.series} - season {self.season.season_number} - episode {self.episode_number}"
+
+
+class Word(models.Model):
+    title = models.CharField(max_length=255)
+    translations = models.JSONField(null=True, blank=True)
+    definition = models.CharField(max_length=255, null=True, blank=True)
+    film = models.ManyToManyField(Film, related_name="words", null=True, blank=True)
+    episode = models.ManyToManyField(Episode, related_name="words", null=True, blank=True)
+
+    def __str__(self):
+        return self.title
+
+
+class Phrases(models.Model):
+    title = models.CharField(max_length=255)
+    translations = models.JSONField(null=True, blank=True)
+    definition = models.CharField(max_length=255, null=True, blank=True)
+    film = models.ManyToManyField(Film, related_name="phrases", null=True, blank=True)
+    episode = models.ManyToManyField(Episode, related_name="phrases", null=True, blank=True)
+    is_idiom = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
