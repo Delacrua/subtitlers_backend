@@ -18,7 +18,6 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class WordSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = sbt_models.Word
         exclude = (
@@ -26,15 +25,13 @@ class WordSerializer(serializers.ModelSerializer):
             "episode",
         )
 
-    def serialize_quantity(self, word_instance):
-        word_quantity_instance = word_instance.wordquantity_set.filter(
-            film=self.context["film_instance"]
-        ).first()
+    def serialize_quantity(self, word_instance) -> dict:  # type: ignore
+        word_quantity_instance = word_instance.wordquantity_set.filter(film=self.context["film_instance"]).first()
         if word_quantity_instance:
             return WordQuantitySerializer(word_quantity_instance).data
         return {}
 
-    def to_representation(self, instance):
+    def to_representation(self, instance) -> dict:  # type: ignore
         rep = super().to_representation(instance)
         return {**rep, **self.serialize_quantity(instance)}
 
@@ -42,9 +39,7 @@ class WordSerializer(serializers.ModelSerializer):
 class WordQuantitySerializer(serializers.ModelSerializer):
     class Meta:
         model = sbt_models.WordQuantity
-        fields = (
-            "quantity",
-        )
+        fields = ("quantity",)
 
 
 class PhraseSerializer(serializers.ModelSerializer):
@@ -75,12 +70,8 @@ class FilmSerializer(serializers.ModelSerializer):
     phrases = PhraseSerializer(many=True, read_only=True)
     questions = QuestionSerializer(many=True, read_only=True)
 
-    def get_words(self, film):
-        return WordSerializer(
-            film.words.all(),
-            many=True,
-            context={"film_instance": film}
-        ).data
+    def get_words(self, film):  # type: ignore
+        return WordSerializer(film.words.all(), many=True, context={"film_instance": film}).data
 
     class Meta:
         model = sbt_models.Film

@@ -4,7 +4,7 @@ from subtitles import models as sbt_models
 
 
 class FilmAdmin(admin.ModelAdmin):
-    filter_horizontal = ['genres']
+    filter_horizontal = ["genres"]
 
 
 admin.site.register(sbt_models.Genre)
