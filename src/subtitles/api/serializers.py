@@ -4,6 +4,7 @@ from subtitles import models as sbt_models
 
 __all__ = [
     "FilmSerializer",
+    "EpisodeSerializer",
 ]
 
 
@@ -26,9 +27,16 @@ class WordSerializer(serializers.ModelSerializer):
         )
 
     def serialize_quantity(self, word_instance) -> dict:  # type: ignore
-        word_quantity_instance = word_instance.wordquantity_set.filter(film=self.context["film_instance"]).first()
-        if word_quantity_instance:
-            return WordQuantitySerializer(word_quantity_instance).data
+        if "film_instance" in self.context:
+            word_quantity_instance = word_instance.wordquantity_set.filter(film=self.context["film_instance"]).first()
+            if word_quantity_instance:
+                return WordQuantitySerializer(word_quantity_instance).data
+        elif "episode_instance" in self.context:
+            word_quantity_instance = word_instance.wordquantity_set.filter(
+                episode=self.context["episode_instance"]
+            ).first()
+            if word_quantity_instance:
+                return WordQuantitySerializer(word_quantity_instance).data
         return {}
 
     def to_representation(self, instance) -> dict:  # type: ignore
@@ -58,9 +66,9 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = sbt_models.Question
         fields = (
             "question_text",
-            "q_translations",
+            "question_translations",
             "answer_text",
-            "a_translations",
+            "answer_translations",
         )
 
 
@@ -90,3 +98,33 @@ class FilmSerializer(serializers.ModelSerializer):
             "phrases",
             "questions",
         )
+
+
+class SeriesSerializer(serializers.ModelSerializer):
+    genres = GenreSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = sbt_models.Series
+        fields = "__all__"
+
+
+class SeasonSeralizer(serializers.ModelSerializer):
+    series = SeriesSerializer(many=False)
+
+    class Meta:
+        model = sbt_models.Season
+        fields = "__all__"
+
+
+class EpisodeSerializer(serializers.ModelSerializer):
+    season = SeasonSeralizer(many=False)
+    words = serializers.SerializerMethodField()
+    phrases = PhraseSerializer(many=True, read_only=True)
+    questions = QuestionSerializer(many=True, read_only=True)
+
+    def get_words(self, episode):  # type: ignore
+        return WordSerializer(episode.words.all(), many=True, context={"episode_instance": episode}).data
+
+    class Meta:
+        model = sbt_models.Episode
+        fields = "__all__"

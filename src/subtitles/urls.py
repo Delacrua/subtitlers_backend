@@ -10,4 +10,5 @@ router = SimpleRouter()
 urlpatterns = [
     path("", include(router.urls)),
     path("films/", viewsets.FilmListView.as_view(), name="films"),
+    path("episodes/", viewsets.EpisodeListView.as_view(), name="episodes"),
 ]

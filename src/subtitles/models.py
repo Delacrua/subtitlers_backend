@@ -16,13 +16,13 @@ class Genre(models.Model):
 class Film(models.Model):
     title = models.CharField(max_length=255)
     other_titles = models.JSONField(blank=True, null=True)  # to discuss
-    genres = models.ManyToManyField(Genre, related_name="films")
     released = models.PositiveIntegerField(blank=True)
     duration = models.DurationField(blank=True, null=True)
     difficulty_level = models.CharField(max_length=30, choices=definitions.DIFFICULTY_CHOICES, blank=True)
     poster = models.ImageField(blank=True, null=True)
     description = models.CharField(max_length=255, blank=True)
     summary = models.CharField(max_length=1023, blank=True)
+    genres = models.ManyToManyField(Genre, related_name="films")
 
     def __str__(self) -> str:
         return self.title
@@ -31,7 +31,6 @@ class Film(models.Model):
 class Series(models.Model):
     title = models.CharField(max_length=255)
     other_titles = models.JSONField(blank=True, null=True)  # to discuss
-    genres = models.ManyToManyField(Genre, related_name="series")
     released = models.PositiveIntegerField(blank=True)
     ended = models.PositiveIntegerField(blank=True)
     number_of_seasons = models.PositiveIntegerField(blank=True)
@@ -39,6 +38,7 @@ class Series(models.Model):
     difficulty_level = models.CharField(max_length=30, choices=definitions.DIFFICULTY_CHOICES, blank=True)
     poster = models.ImageField(blank=True, null=True)
     description = models.CharField(max_length=255, blank=True)
+    genres = models.ManyToManyField(Genre, related_name="series")
 
     def __str__(self) -> str:
         return self.title
@@ -105,9 +105,9 @@ class Phrase(models.Model):
 
 class Question(models.Model):
     question_text = models.CharField(max_length=255)
-    q_translations = models.JSONField(null=True, blank=True)
+    question_translations = models.JSONField(null=True, blank=True)
     answer_text = models.CharField(max_length=255)
-    a_translations = models.JSONField(null=True, blank=True)
+    answer_translations = models.JSONField(null=True, blank=True)
     film = models.ForeignKey(Film, related_name="questions", blank=True, null=True, on_delete=models.SET_NULL)
     episode = models.ForeignKey(Episode, related_name="questions", blank=True, null=True, on_delete=models.SET_NULL)
 
