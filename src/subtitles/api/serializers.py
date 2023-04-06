@@ -28,7 +28,9 @@ class WordSerializer(serializers.ModelSerializer):
 
     def serialize_quantity(self, word_instance) -> dict:  # type: ignore
         if "film_instance" in self.context:
-            word_quantity_instance = word_instance.filmwordquantity_set.filter(film=self.context["film_instance"]).first()
+            word_quantity_instance = word_instance.filmwordquantity_set.filter(
+                film=self.context["film_instance"]
+            ).first()
             if word_quantity_instance:
                 return FilmWordQuantitySerializer(word_quantity_instance).data
         elif "episode_instance" in self.context:
