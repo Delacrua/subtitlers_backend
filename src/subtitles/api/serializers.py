@@ -102,18 +102,61 @@ class FilmSerializer(serializers.ModelSerializer):
 
 class SeriesSerializer(serializers.ModelSerializer):
     genres = GenreSerializer(many=True, read_only=True)
+    number_of_seasons = serializers.SerializerMethodField()
+    number_of_episodes = serializers.SerializerMethodField()
+    seasons = serializers.SerializerMethodField()
+
+    def get_number_of_seasons(self, series):  # type: ignore
+        return series.seasons.count()
+
+    def get_seasons(self, series):  # type: ignore
+        seasons_list = []
+        for season in series.seasons.all():
+            seasons_list.append({"id": season.id, "season_number": season.season_number})
+        return seasons_list
+
+    def get_number_of_episodes(self, series):  # type: ignore
+        number_of_episodes = 0
+        for season in series.seasons.all():
+            number_of_episodes += season.episodes.count()
+        return number_of_episodes
 
     class Meta:
         model = sbt_models.Series
-        fields = "__all__"
+        fields = (
+            "id",
+            "title",
+            "other_titles",
+            "released",
+            "ended",
+            "number_of_seasons",
+            "number_of_episodes",
+            "difficulty_level",
+            "poster",
+            "description",
+            "genres",
+            "seasons",
+        )
 
 
 class SeasonSeralizer(serializers.ModelSerializer):
     series = SeriesSerializer(many=False)
+    number_of_episodes = serializers.SerializerMethodField()
+
+    def get_number_of_episodes(self, season):  # type: ignore
+        return season.episodes.count()
 
     class Meta:
         model = sbt_models.Season
-        fields = "__all__"
+        fields = (
+            "id",
+            "season_number",
+            "number_of_episodes",
+            "released",
+            "ended",
+            "description",
+            "series",
+        )
 
 
 class EpisodeSerializer(serializers.ModelSerializer):
@@ -127,4 +170,16 @@ class EpisodeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = sbt_models.Episode
-        fields = "__all__"
+        fields = (
+            "id",
+            "episode_number",
+            "episode_title",
+            "other_titles",
+            "duration",
+            "description",
+            "summary",
+            "words",
+            "phrases",
+            "questions",
+            "season",
+        )
