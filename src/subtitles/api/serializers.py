@@ -28,15 +28,15 @@ class WordSerializer(serializers.ModelSerializer):
 
     def serialize_quantity(self, word_instance) -> dict:  # type: ignore
         if "film_instance" in self.context:
-            word_quantity_instance = word_instance.wordquantity_set.filter(film=self.context["film_instance"]).first()
+            word_quantity_instance = word_instance.filmwordquantity_set.filter(film=self.context["film_instance"]).first()
             if word_quantity_instance:
-                return WordQuantitySerializer(word_quantity_instance).data
+                return FilmWordQuantitySerializer(word_quantity_instance).data
         elif "episode_instance" in self.context:
-            word_quantity_instance = word_instance.wordquantity_set.filter(
+            word_quantity_instance = word_instance.episodewordquantity_set.filter(
                 episode=self.context["episode_instance"]
             ).first()
             if word_quantity_instance:
-                return WordQuantitySerializer(word_quantity_instance).data
+                return EpisodeWordQuantitySerializer(word_quantity_instance).data
         return {}
 
     def to_representation(self, instance) -> dict:  # type: ignore
@@ -44,9 +44,15 @@ class WordSerializer(serializers.ModelSerializer):
         return {**rep, **self.serialize_quantity(instance)}
 
 
-class WordQuantitySerializer(serializers.ModelSerializer):
+class EpisodeWordQuantitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = sbt_models.WordQuantity
+        model = sbt_models.EpisodeWordQuantity
+        fields = ("quantity",)
+
+
+class FilmWordQuantitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = sbt_models.FilmWordQuantity
         fields = ("quantity",)
 
 

@@ -71,21 +71,29 @@ class Word(models.Model):
     translations = models.JSONField(null=True, blank=True)
     definition = models.CharField(max_length=25, blank=True)
     is_uncommon = models.BooleanField(default=False)
-    film = models.ManyToManyField(Film, through="WordQuantity", related_name="words", blank=True)
-    episode = models.ManyToManyField(Episode, through="WordQuantity", related_name="words", blank=True)
+    film = models.ManyToManyField(Film, through="FilmWordQuantity", related_name="words", blank=True)
+    episode = models.ManyToManyField(Episode, through="EpisodeWordQuantity", related_name="words", blank=True)
 
     def __str__(self) -> str:
         return self.text
 
 
-class WordQuantity(models.Model):
+class EpisodeWordQuantity(models.Model):
     word = models.ForeignKey(Word, on_delete=models.CASCADE)
-    film = models.ForeignKey(Film, null=True, blank=True, on_delete=models.SET_NULL)
-    episode = models.ForeignKey(Episode, null=True, blank=True, on_delete=models.SET_NULL)
+    episode = models.ForeignKey(Episode, null=True, blank=True, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
 
     def __str__(self) -> str:
-        return str(self.word)
+        return f"{self.episode} - {self.word}"
+
+
+class FilmWordQuantity(models.Model):
+    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    film = models.ForeignKey(Film, null=True, blank=True, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
+
+    def __str__(self) -> str:
+        return f"{self.film} - {self.word}"
 
 
 class Phrase(models.Model):
