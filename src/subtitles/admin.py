@@ -11,9 +11,13 @@ class SeriesAdmin(admin.ModelAdmin):
     filter_horizontal = ["genres"]
 
 
+class PhraseAdmin(admin.ModelAdmin):
+    filter_horizontal = ["film", "episode"]
+
+
 admin.site.register(sbt_models.Genre)
 admin.site.register(sbt_models.Word)
-admin.site.register(sbt_models.Phrase)
+admin.site.register(sbt_models.Phrase, PhraseAdmin)
 admin.site.register(sbt_models.Question)
 admin.site.register(sbt_models.Film, FilmAdmin)
 admin.site.register(sbt_models.Series, SeriesAdmin)
