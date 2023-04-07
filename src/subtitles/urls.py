@@ -6,9 +6,10 @@ from django.urls import path
 from subtitles.api import viewsets
 
 router = SimpleRouter()
+router.register("films", viewsets.FilmListViewSet, basename="films")
+router.register("episodes", viewsets.EpisodeListViewSet, basename="episodes")
+
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("films/", viewsets.FilmListView.as_view(), name="films"),
-    path("episodes/", viewsets.EpisodeListView.as_view(), name="episodes"),
 ]
