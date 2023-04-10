@@ -69,9 +69,20 @@ class PhraseSerializer(serializers.ModelSerializer):
         )
 
 
-class QuestionSerializer(serializers.ModelSerializer):
+class FilmQuestionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = sbt_models.Question
+        model = sbt_models.FilmQuestion
+        fields = (
+            "question_text",
+            "question_translations",
+            "answer_text",
+            "answer_translations",
+        )
+
+
+class EpisodeQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = sbt_models.EpisodeQuestion
         fields = (
             "question_text",
             "question_translations",
@@ -84,7 +95,7 @@ class FilmSerializer(serializers.ModelSerializer):
     genres = GenreSerializer(many=True, read_only=True)
     words = serializers.SerializerMethodField()
     phrases = PhraseSerializer(many=True, read_only=True)
-    questions = QuestionSerializer(many=True, read_only=True)
+    questions = FilmQuestionSerializer(many=True, read_only=True)
 
     def get_words(self, film):  # type: ignore
         return WordSerializer(film.words.all(), many=True, context={"film_instance": film}).data
@@ -171,7 +182,7 @@ class EpisodeSerializer(serializers.ModelSerializer):
     season = SeasonSeralizer(many=False)
     words = serializers.SerializerMethodField()
     phrases = PhraseSerializer(many=True, read_only=True)
-    questions = QuestionSerializer(many=True, read_only=True)
+    questions = EpisodeQuestionSerializer(many=True, read_only=True)
 
     def get_words(self, episode):  # type: ignore
         return WordSerializer(episode.words.all(), many=True, context={"episode_instance": episode}).data

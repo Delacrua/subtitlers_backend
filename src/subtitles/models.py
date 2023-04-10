@@ -108,13 +108,23 @@ class Phrase(models.Model):
         return self.text
 
 
-class Question(models.Model):
+class FilmQuestion(models.Model):
     question_text = models.CharField(max_length=255)
     question_translations = models.JSONField(null=True, blank=True)
     answer_text = models.CharField(max_length=255)
     answer_translations = models.JSONField(null=True, blank=True)
-    film = models.ForeignKey(Film, related_name="questions", blank=True, null=True, on_delete=models.SET_NULL)
-    episode = models.ForeignKey(Episode, related_name="questions", blank=True, null=True, on_delete=models.SET_NULL)
+    film = models.ForeignKey(Film, related_name="questions", blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.question_text
+        return f"{self.film} - {self.question_text}"
+
+
+class EpisodeQuestion(models.Model):
+    question_text = models.CharField(max_length=255)
+    question_translations = models.JSONField(null=True, blank=True)
+    answer_text = models.CharField(max_length=255)
+    answer_translations = models.JSONField(null=True, blank=True)
+    episode = models.ForeignKey(Episode, related_name="questions", blank=True, null=True, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f"{self.episode} - {self.question_text}"
