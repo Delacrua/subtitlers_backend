@@ -15,4 +15,4 @@ MIDDLEWARE = [
 ]
 
 if env("DEBUG", cast=bool, default=False):
-    MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
+    MIDDLEWARE.insert(3, "debug_toolbar.middleware.DebugToolbarMiddleware")

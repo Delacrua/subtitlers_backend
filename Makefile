@@ -9,6 +9,17 @@ dev-down:
 dev-test:
 	docker compose -f docker-compose.dev.yml run web sh -c 'pytest'
 
+local-build:
+	docker compose -f docker-compose.local.yml build
+local-up:
+	docker compose -f docker-compose.local.yml up
+local-up-d:
+	docker compose -f docker-compose.local.yml up -d
+local-down:
+	docker compose -f docker-compose.local.yml down
+local-test:
+	docker compose -f docker-compose.local.yml run web sh -c 'pytest'
+
 install-dev-deps: dev-deps
 	pip-sync requirements.txt dev-requirements.txt
 
