@@ -5,6 +5,8 @@ from subtitles import models as sbt_models
 __all__ = [
     "FilmSerializer",
     "EpisodeSerializer",
+    "SeasonSeralizer",
+    "SeriesSerializer",
 ]
 
 

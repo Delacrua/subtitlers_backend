@@ -111,6 +111,8 @@ drf-spectacular[sidecar]==0.25.1
     # via Habiton-Backend (pyproject.toml)
 drf-spectacular-sidecar==2022.12.1
     # via drf-spectacular
+drf-nested-routers==0.93.4
+    # via Habiton-Backend (pyproject.toml)
 eradicate==2.1.0
     # via flake8-eradicate
 exceptiongroup==1.1.0

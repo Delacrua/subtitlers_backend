@@ -38,6 +38,9 @@ class Series(models.Model):
     description = models.CharField(max_length=255, blank=True)
     genres = models.ManyToManyField(Genre, related_name="series")
 
+    class Meta:
+        verbose_name_plural = "series"
+
     def __str__(self) -> str:
         return self.title
 
