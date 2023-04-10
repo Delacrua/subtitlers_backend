@@ -148,32 +148,40 @@ class SeriesSerializer(serializers.ModelSerializer):
             "other_titles",
             "released",
             "ended",
-            "number_of_seasons",
             "number_of_episodes",
             "difficulty_level",
             "poster",
             "description",
-            "genres",
+            "number_of_seasons",
             "seasons",
+            "genres",
         )
 
 
 class SeasonSeralizer(serializers.ModelSerializer):
     series = SeriesSerializer(many=False)
+    episodes = serializers.SerializerMethodField()
     number_of_episodes = serializers.SerializerMethodField()
 
     def get_number_of_episodes(self, season):  # type: ignore
         return season.episodes.count()
+
+    def get_episodes(self, season):  # type: ignore
+        seasons_list = []
+        for episode in season.episodes.all():
+            seasons_list.append({"id": episode.id, "episode_number": episode.episode_number})
+        return seasons_list
 
     class Meta:
         model = sbt_models.Season
         fields = (
             "id",
             "season_number",
-            "number_of_episodes",
             "released",
             "ended",
             "description",
+            "number_of_episodes",
+            "episodes",
             "series",
         )
 
