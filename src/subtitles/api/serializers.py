@@ -174,7 +174,7 @@ class SeasonSeralizer(serializers.ModelSerializer):
             seasons_list.append({"id": episode.id, "episode_number": episode.episode_number})
         return seasons_list
 
-    def get_series(self, season):
+    def get_series(self, season):  # type: ignore
         return {"id": season.series.id, "title": season.series.title}
 
     class Meta:
@@ -200,7 +200,7 @@ class EpisodeSerializer(serializers.ModelSerializer):
     def get_words(self, episode):  # type: ignore
         return WordSerializer(episode.words.all(), many=True, context={"episode_instance": episode}).data
 
-    def get_season(self, episode):
+    def get_season(self, episode):  # type: ignore
         return {"id": episode.season.id, "title": str(episode.season)}
 
     class Meta:

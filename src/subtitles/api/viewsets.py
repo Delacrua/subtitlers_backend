@@ -14,12 +14,21 @@ __all__ = [
 
 
 class FilmViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = sbt_models.Film.objects.all()
+    queryset = sbt_models.Film.objects.prefetch_related(
+        "words",
+        "genres",
+        "phrases",
+        "questions",
+    ).all()
     serializer_class = sbt_serializers.FilmSerializer
 
 
 class SeriesViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = sbt_models.Series.objects.prefetch_related("seasons", "seasons__episodes").all()
+    queryset = sbt_models.Series.objects.prefetch_related(
+        "seasons",
+        "genres",
+        "seasons__episodes",
+    ).all()
     serializer_class = sbt_serializers.SeriesSerializer
 
 
