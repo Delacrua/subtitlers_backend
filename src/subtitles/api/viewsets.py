@@ -19,7 +19,7 @@ class FilmViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class SeriesViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = sbt_models.Series.objects.all()
+    queryset = sbt_models.Series.objects.prefetch_related("seasons", "seasons__episodes").all()
     serializer_class = sbt_serializers.SeriesSerializer
 
 
