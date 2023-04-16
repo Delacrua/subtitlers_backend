@@ -9,7 +9,7 @@ on:
 
 env:
   ENVIRONMENT: ${{ github.head_ref || github.ref_name }}
-  PROJECT: api-${{ github.head_ref || github.ref_name }}
+  PROJECT: subtitler-api-${{ github.head_ref || github.ref_name }}
 
 jobs:
    deploy:
