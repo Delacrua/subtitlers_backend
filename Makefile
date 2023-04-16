@@ -60,3 +60,7 @@ coverage:
 
 migrations:
 	cd src && python manage.py makemigrations
+
+push:
+	git push origin
+	git push upstream

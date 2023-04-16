@@ -161,7 +161,7 @@ class SeriesSerializer(serializers.ModelSerializer):
 
 
 class SeasonSeralizer(serializers.ModelSerializer):
-    series = SeriesSerializer(many=False)
+    series = serializers.SerializerMethodField()
     episodes = serializers.SerializerMethodField()
     number_of_episodes = serializers.SerializerMethodField()
 
@@ -173,6 +173,9 @@ class SeasonSeralizer(serializers.ModelSerializer):
         for episode in season.episodes.all():
             seasons_list.append({"id": episode.id, "episode_number": episode.episode_number})
         return seasons_list
+
+    def get_series(self, season):  # type: ignore
+        return {"id": season.series.id, "title": season.series.title}
 
     class Meta:
         model = sbt_models.Season
@@ -189,13 +192,16 @@ class SeasonSeralizer(serializers.ModelSerializer):
 
 
 class EpisodeSerializer(serializers.ModelSerializer):
-    season = SeasonSeralizer(many=False)
+    season = serializers.SerializerMethodField()
     words = serializers.SerializerMethodField()
     phrases = PhraseSerializer(many=True, read_only=True)
     questions = EpisodeQuestionSerializer(many=True, read_only=True)
 
     def get_words(self, episode):  # type: ignore
         return WordSerializer(episode.words.all(), many=True, context={"episode_instance": episode}).data
+
+    def get_season(self, episode):  # type: ignore
+        return {"id": episode.season.id, "title": str(episode.season)}
 
     class Meta:
         model = sbt_models.Episode
