@@ -1,0 +1,47 @@
+name: Subtitler deploy CI/CD
+
+on:
+  push:
+    branches: 
+    - release
+    - staging
+    - dev
+
+env:
+  ENVIRONMENT: ${{ github.head_ref || github.ref_name }}
+  PROJECT: api-${{ github.head_ref || github.ref_name }}
+
+jobs:
+   deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - run: ssh-keyscan "${{ secrets.SERVER_IPADDRESS }}" >> ~/.ssh/known_hosts
+    - run: chmod 644 ~/.ssh/known_hosts
+
+    - name: Setup .env variables
+      run: |
+        echo POSTGRES_DB="${{ secrets.POSTGRES_DB }}" > .env
+        echo POSTGRES_USER="${{ secrets.POSTGRES_USER }}" >> .env
+        echo POSTGRES_PASSWORD="${{ secrets.POSTGRES_PASSWORD }}" >> .env
+        echo DATABASE_URL="${{ secrets.DATABASE_URL }}" >> .env
+        echo SECRET_KEY="${{ secrets.SECRET_KEY }}" >> .env
+        echo DJANGO_SUPERUSER_USERNAME="${{ secrets.DJANGO_SUPERUSER_USERNAME }}" >> .env
+        echo DJANGO_SUPERUSER_EMAIL="${{ secrets.DJANGO_SUPERUSER_EMAIL }}" >> .env
+        echo DJANGO_SUPERUSER_PASSWORD="${{ secrets.DJANGO_SUPERUSER_PASSWORD }}" >> .env
+        echo DEBUG="${{ secrets.DEBUG }}" >> .env
+
+    - name: Down Docker container
+      run: docker -H "ssh://root@${{ secrets.SERVER_IPADDRESS }}" compose -f docker-compose.$ENVIRONMENT.yml -p $PROJECT down
+
+    - name: Build Docker image
+      run: docker -H "ssh://root@${{ secrets.SERVER_IPADDRESS }}" compose -f docker-compose.$ENVIRONMENT.yml -p $PROJECT build
+
+    - name: Up Docker container
+      run: docker -H "ssh://root@${{secrets.SERVER_IPADDRESS}}" compose -f docker-compose.$ENVIRONMENT.yml -p $PROJECT up -d
