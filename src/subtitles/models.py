@@ -108,7 +108,7 @@ class Phrase(models.Model):
     episode = models.ManyToManyField(Episode, related_name="phrases", blank=True)
 
     def __str__(self) -> str:
-        return self.text
+        return str(self.text)
 
 
 class FilmQuestion(models.Model):

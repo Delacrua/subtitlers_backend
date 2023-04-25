@@ -1,8 +1,8 @@
 from subtitles import models as sbt_models
 
 
-class CreateFilmService:
-    """A service for creation of film instances"""
+class CreateUpdateFilmService:
+    """A service for creation and updating of film instances"""
 
     def __init__(self, film_data: dict) -> None:
         """
@@ -62,7 +62,7 @@ class CreateFilmService:
         )
 
     def _add_words_with_quantities_to_film(self, film_object: sbt_models.Film) -> None:
-        for word_data in self.film_data.get("words"):
+        for word_data in self.film_data.get("words", {}):
             if word_data:
                 word_object, created = self._get_or_create_word(word_data)
                 film_word_quantity, created = sbt_models.FilmWordQuantity.objects.get_or_create(
