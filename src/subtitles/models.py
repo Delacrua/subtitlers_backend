@@ -20,8 +20,8 @@ class Film(models.Model):
     duration = models.DurationField(blank=True, null=True)
     difficulty_level = models.CharField(max_length=30, choices=definitions.DIFFICULTY_CHOICES, blank=True)
     poster = models.ImageField(blank=True, null=True)
-    description = models.CharField(max_length=255, blank=True)
-    summary = models.CharField(max_length=1023, blank=True)
+    description = models.TextField(blank=True)
+    summary = models.TextField(blank=True)
     genres = models.ManyToManyField(Genre, related_name="films")
 
     def __str__(self) -> str:
@@ -35,7 +35,7 @@ class Series(models.Model):
     ended = models.PositiveIntegerField(blank=True)
     difficulty_level = models.CharField(max_length=30, choices=definitions.DIFFICULTY_CHOICES, blank=True)
     poster = models.ImageField(blank=True, null=True)
-    description = models.CharField(max_length=255, blank=True)
+    description = models.TextField(blank=True)
     genres = models.ManyToManyField(Genre, related_name="series")
 
     class Meta:
@@ -50,7 +50,7 @@ class Season(models.Model):
     season_number = models.PositiveIntegerField(blank=True)
     released = models.PositiveIntegerField(blank=True)
     ended = models.PositiveIntegerField(blank=True)
-    description = models.CharField(max_length=255, blank=True)
+    description = models.TextField(blank=True)
 
     def __str__(self) -> str:
         return f"{self.series} - season {self.season_number}"
@@ -62,8 +62,8 @@ class Episode(models.Model):
     episode_title = models.CharField(max_length=255, blank=True)
     other_titles = models.JSONField(blank=True, null=True)  # to discuss
     duration = models.DurationField(blank=True, null=True)
-    description = models.CharField(max_length=255, blank=True)
-    summary = models.CharField(max_length=1023, blank=True)
+    description = models.TextField(blank=True)
+    summary = models.TextField(blank=True)
 
     def __str__(self) -> str:
         return f"{self.season.series} - season {self.season.season_number} - episode {self.episode_number}"
@@ -72,7 +72,7 @@ class Episode(models.Model):
 class Word(models.Model):
     text = models.CharField(max_length=255)
     translations = models.JSONField(null=True, blank=True)
-    definition = models.CharField(max_length=25, blank=True)
+    definition = models.TextField(blank=True)
     is_uncommon = models.BooleanField(default=False)
     film = models.ManyToManyField(Film, through="FilmWordQuantity", related_name="words", blank=True)
     episode = models.ManyToManyField(Episode, through="EpisodeWordQuantity", related_name="words", blank=True)
@@ -100,9 +100,9 @@ class FilmWordQuantity(models.Model):
 
 
 class Phrase(models.Model):
-    text = models.CharField(max_length=255)
+    text = models.TextField
     translations = models.JSONField(null=True, blank=True)
-    definition = models.CharField(max_length=255, blank=True)
+    definition = models.TextField(blank=True)
     is_idiom = models.BooleanField(default=False)
     film = models.ManyToManyField(Film, related_name="phrases", blank=True)
     episode = models.ManyToManyField(Episode, related_name="phrases", blank=True)
@@ -112,9 +112,9 @@ class Phrase(models.Model):
 
 
 class FilmQuestion(models.Model):
-    question_text = models.CharField(max_length=255)
+    question_text = models.TextField
     question_translations = models.JSONField(null=True, blank=True)
-    answer_text = models.CharField(max_length=255)
+    answer_text = models.TextField(blank=True)
     answer_translations = models.JSONField(null=True, blank=True)
     film = models.ForeignKey(Film, related_name="questions", blank=True, null=True, on_delete=models.CASCADE)
 
@@ -123,9 +123,9 @@ class FilmQuestion(models.Model):
 
 
 class EpisodeQuestion(models.Model):
-    question_text = models.CharField(max_length=255)
+    question_text = models.TextField
     question_translations = models.JSONField(null=True, blank=True)
-    answer_text = models.CharField(max_length=255)
+    answer_text = models.TextField(blank=True)
     answer_translations = models.JSONField(null=True, blank=True)
     episode = models.ForeignKey(Episode, related_name="questions", blank=True, null=True, on_delete=models.CASCADE)
 
