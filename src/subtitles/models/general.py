@@ -2,6 +2,20 @@ from django.db import models
 
 from subtitles import definitions
 
+__all__ = [
+    "Genre",
+    "Film",
+    "Series",
+    "Season",
+    "Episode",
+    "Word",
+    "EpisodeWordQuantity",
+    "FilmWordQuantity",
+    "Phrase",
+    "FilmQuestion",
+    "EpisodeQuestion",
+]
+
 
 class Genre(models.Model):
     title = models.CharField(max_length=30)
@@ -100,7 +114,7 @@ class FilmWordQuantity(models.Model):
 
 
 class Phrase(models.Model):
-    text = models.TextField
+    text = models.TextField()
     translations = models.JSONField(null=True, blank=True)
     definition = models.TextField(blank=True)
     is_idiom = models.BooleanField(default=False)
@@ -112,7 +126,7 @@ class Phrase(models.Model):
 
 
 class FilmQuestion(models.Model):
-    question_text = models.TextField
+    question_text = models.TextField()
     question_translations = models.JSONField(null=True, blank=True)
     answer_text = models.TextField(blank=True)
     answer_translations = models.JSONField(null=True, blank=True)
@@ -123,7 +137,7 @@ class FilmQuestion(models.Model):
 
 
 class EpisodeQuestion(models.Model):
-    question_text = models.TextField
+    question_text = models.TextField()
     question_translations = models.JSONField(null=True, blank=True)
     answer_text = models.TextField(blank=True)
     answer_translations = models.JSONField(null=True, blank=True)

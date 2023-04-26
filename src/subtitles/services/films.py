@@ -1,7 +1,7 @@
 from subtitles import models as sbt_models
 
 
-class CreateUpdateFilmService:
+class CreateFilmService:
     """A service for creation and updating of film instances"""
 
     def __init__(self, film_data: dict) -> None:
@@ -44,7 +44,6 @@ class CreateUpdateFilmService:
                 "released": self.film_data.get("released"),
                 "duration": self.film_data.get("duration"),
                 "difficulty_level": self.film_data.get("difficulty_level"),
-                "poster": self.film_data.get("poster"),
                 "description": self.film_data.get("description"),
                 "summary": self.film_data.get("summary"),
             },
@@ -78,13 +77,13 @@ class CreateUpdateFilmService:
             if phrase_data:
                 phrase_object, created = sbt_models.Phrase.objects.get_or_create(
                     text=phrase_data.get("text"),
-                    film=film_object,
                     defaults={
                         "translations": phrase_data.get("translations", None),
                         "definition": phrase_data.get("translations") if phrase_data.get("translations") else "",
                         "is_idiom": bool(phrase_data.get("is_idiom")),
                     },
                 )
+                film_object.phrases.add(phrase_object)
 
     def _add_questions_to_film(self, film_object: sbt_models.Film) -> None:
         for question_data in self.film_data.get("questions", {}):
