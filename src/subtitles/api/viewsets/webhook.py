@@ -25,9 +25,7 @@ class FilmEventWebhookView(generics.CreateAPIView):
 
     def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         serializer = self.get_serializer(data=request.data)
-        print(request.data)
         serializer.is_valid(raise_exception=True)
-        print(serializer.validated_data)
         if serializer.validated_data.get("event") == "film.created":
             film_data = serializer.validated_data.get("film_data")
             film_object = CreateFilmService(film_data)()

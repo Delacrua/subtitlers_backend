@@ -79,7 +79,7 @@ class CreateFilmService:
                     text=phrase_data.get("text"),
                     defaults={
                         "translations": phrase_data.get("translations", None),
-                        "definition": phrase_data.get("translations") if phrase_data.get("translations") else "",
+                        "definition": phrase_data.get("definition") if phrase_data.get("definition") else "",
                         "is_idiom": bool(phrase_data.get("is_idiom")),
                     },
                 )

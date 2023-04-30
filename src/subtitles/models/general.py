@@ -30,13 +30,18 @@ class Genre(models.Model):
 class Film(models.Model):
     title = models.CharField(max_length=255)
     other_titles = models.JSONField(blank=True, null=True)  # to discuss
-    released = models.PositiveIntegerField(blank=True)
+    released = models.PositiveIntegerField(blank=True, null=True)
     duration = models.DurationField(blank=True, null=True)
     difficulty_level = models.CharField(max_length=30, choices=definitions.DIFFICULTY_CHOICES, blank=True)
     poster = models.ImageField(blank=True, null=True)
     description = models.TextField(blank=True)
     summary = models.TextField(blank=True)
-    genres = models.ManyToManyField(Genre, related_name="films")
+    genres = models.ManyToManyField(
+        Genre,
+        related_name="films",
+        null=True,
+        blank=True,
+    )
 
     def __str__(self) -> str:
         return self.title
