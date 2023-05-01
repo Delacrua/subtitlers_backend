@@ -5,6 +5,7 @@ CSRF_TRUSTED_ORIGINS: list = [
     "https://*.flerman.com",
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
 
 if env("DEBUG", cast=bool, default=False):
     import socket  # only if you haven't already imported this
