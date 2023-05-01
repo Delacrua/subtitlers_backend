@@ -28,6 +28,8 @@ jobs:
     - name: Setup .env variables
       run: |
         echo DEBUG="${{ vars.DEBUG }}" >> .env
+        echo MEDIA_ROOT="${{ vars.MEDIA_ROOT }}" >> .env
+        echo STATIC_ROOT="${{ vars.STATIC_ROOT }}" >> .env
         echo POSTGRES_DB="${{ secrets.POSTGRES_DB }}" > .env
         echo POSTGRES_USER="${{ secrets.POSTGRES_USER }}" >> .env
         echo POSTGRES_PASSWORD="${{ secrets.POSTGRES_PASSWORD }}" >> .env
