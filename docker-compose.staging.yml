@@ -1,18 +1,19 @@
 version: '3.9'
 
 volumes:
-  postgres-data:
+  sub-postgres-data:
+  sub-static-data:
 
 services:
   web:
     container_name: subtitler-api-staging
     restart: unless-stopped
+    volumes:
+      - sub-static-data:/src/vol/web
     build:
       context: ./src
       args:
-        REQUIREMENTS_FILE: requirements.txt
-    ports:
-        - "8001:8000"
+        REQUIREMENTS_FILE: dev-requirements.txt
     env_file:
       - .env
     depends_on:
@@ -25,6 +26,18 @@ services:
     env_file:
       - .env
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - sub-postgres-data:/var/lib/postgresql/data/
     expose:
       - 5432
+
+  proxy:
+    container_name: subtitler-proxy-staging
+    build:
+      context: ./proxy
+    restart: unless-stopped
+    depends_on:
+      - web
+    ports:
+      - "8001:8000"
+    volumes:
+      - sub-static-data:/vol/static
