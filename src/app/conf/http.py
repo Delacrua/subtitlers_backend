@@ -5,12 +5,7 @@ CSRF_TRUSTED_ORIGINS: list = [
     "https://*.flerman.com",
 ]
 
-CORS_ORIGIN_REGEX_WHITELIST = [
-    r".*localhost.*",
-    r".*127.0.0.1.*",
-    r".*192.168.*",
-    r"*.*netlify.*",
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 if env("DEBUG", cast=bool, default=False):
     import socket  # only if you haven't already imported this
