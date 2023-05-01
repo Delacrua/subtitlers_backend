@@ -54,10 +54,16 @@ WORKDIR /src
 COPY . /src
 COPY ./scripts /scripts
 
-RUN chmod +x /scripts/*.sh
+RUN chmod +x /scripts/*.sh \
+    && mkdir -p /vol/web/media \
+    && mkdir -p /vol/web/static \
+    && useradd -M user \
+    && chown -R user:user /vol \
+    && chmod -R 755 /vol/web
+
 
 ENTRYPOINT ["/scripts/entrypoint.sh"]
 
 CMD ["/scripts/start.sh"]
 
-#USER nobody
+# USER user
