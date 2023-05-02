@@ -7,7 +7,7 @@ CSRF_TRUSTED_ORIGINS: list = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-SITE_ID = env("SITE_ID", cast=int, default=1):
+SITE_ID = env("SITE_ID", cast=int, default=2):
 
 if env("DEBUG", cast=bool, default=False):
     import socket  # only if you haven't already imported this
