@@ -105,8 +105,8 @@ class FilmSerializer(serializers.ModelSerializer):
         return WordSerializer(film.words.all(), many=True, context={"film_instance": film}).data
 
     def get_poster(self, film):  # type: ignore
-        url_string = "https://%s%s" % (Site.objects.get_current().domain, film.poster.url)
-        return url_string.replace("//", "/")
+        url_string = "%s%s" % (Site.objects.get_current().domain, film.poster.url)
+        return "https://" + url_string.replace("//", "/")
 
     class Meta:
         model = sbt_models.Film
