@@ -1,7 +1,7 @@
 from typing import Optional
 
 from subtitles import models as sbt_models
-from subtitles.services.data.genres_list import GENRES_DATA
+from subtitles.services.data.genres_list import BASE_GENRES_DATA
 
 
 class GenreBulkCreateUpdateService:
@@ -11,7 +11,7 @@ class GenreBulkCreateUpdateService:
         """
         :param genre_data_list: list of dictionaries with Genre data
         """
-        self.genre_data_list = genre_data_list if genre_data_list else GENRES_DATA
+        self.genre_data_list = genre_data_list if genre_data_list else BASE_GENRES_DATA
 
     def __call__(self) -> None:
         return self.act()

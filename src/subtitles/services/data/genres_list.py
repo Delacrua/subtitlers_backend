@@ -1,4 +1,4 @@
-GENRES_DATA = [
+BASE_GENRES_DATA = [
     {
         "title": "action",
         "readable": "Action",

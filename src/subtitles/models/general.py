@@ -39,8 +39,6 @@ class Film(models.Model):
     genres = models.ManyToManyField(
         Genre,
         related_name="films",
-        null=True,
-        blank=True,
     )
 
     def __str__(self) -> str:

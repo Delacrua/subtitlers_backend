@@ -31,6 +31,10 @@ class CreateFilmService:
         if questions_data:
             self._add_questions_to_film(film_object)
 
+        genres_data = self.film_data.get("genres", {})
+        if genres_data:
+            self._add_genres_to_film(film_object)
+
         return film_object
 
     def _update_or_create_film_object(self) -> tuple[sbt_models.Film, bool]:
@@ -97,3 +101,9 @@ class CreateFilmService:
                         "answer_text": question_data.get("answer_text") if question_data.get("answer_text") else "",
                     },
                 )
+
+    def _add_genres_to_film(self, film_object: sbt_models.Film) -> None:
+        for genre_data in self.film_data.get("genres", {}):
+            if genre_data:
+                genre_object = sbt_models.Genre.objects.get(title=genre_data.get("title"))
+                film_object.genres.add(genre_object)
