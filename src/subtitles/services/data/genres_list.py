@@ -120,12 +120,6 @@ BASE_GENRES_DATA = [
         "is_series_genre": True,
     },
     {
-        "title": "mystery",
-        "readable": "Mystery",
-        "is_film_genre": True,
-        "is_series_genre": True,
-    },
-    {
         "title": "sport",
         "readable": "Sport",
         "is_film_genre": True,
