@@ -1,3 +1,4 @@
+from django.contrib.sites.models import Site
 from rest_framework import serializers
 
 from subtitles import models as sbt_models
@@ -98,9 +99,16 @@ class FilmSerializer(serializers.ModelSerializer):
     words = serializers.SerializerMethodField()
     phrases = PhraseSerializer(many=True, read_only=True)
     questions = FilmQuestionSerializer(many=True, read_only=True)
+    poster = serializers.SerializerMethodField()
 
     def get_words(self, film):  # type: ignore
         return WordSerializer(film.words.all(), many=True, context={"film_instance": film}).data
+    
+    def get_poster(self, film):  # type: ignore
+        if film.poster:
+            url_string = "%s%s" % (Site.objects.get_current().domain, film.poster.url)
+            return "https://" + url_string.replace("//", "/")
+        return None
 
     class Meta:
         model = sbt_models.Film

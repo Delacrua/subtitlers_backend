@@ -2,17 +2,18 @@ version: '3.9'
 
 volumes:
   sub-postgres-data:
+  sub-static-data:
 
 services:
   web:
     container_name: subtitler-api-dev
     restart: unless-stopped
+    volumes:
+      - sub-static-data:/src/vol/web
     build:
       context: ./src
       args:
         REQUIREMENTS_FILE: dev-requirements.txt
-    ports:
-        - "8000:8000"
     env_file:
       - .env
     depends_on:
@@ -28,3 +29,15 @@ services:
       - sub-postgres-data:/var/lib/postgresql/data/
     expose:
       - 5432
+
+  proxy:
+    container_name: subtitler-proxy-dev
+    build:
+      context: ./proxy
+    restart: unless-stopped
+    depends_on:
+      - web
+    ports:
+      - "8000:8000"
+    volumes:
+      - sub-static-data:/vol/static

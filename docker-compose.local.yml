@@ -13,6 +13,7 @@ services:
         REQUIREMENTS_FILE: dev-requirements.txt
     volumes:
       - ./src:/src
+      - ./vol/web:/vol/web
     ports:
         - "8000:8000"
     depends_on:

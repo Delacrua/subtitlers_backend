@@ -1,3 +1,3 @@
 #!/bin/bash
 
-uwsgi --master --http :8000 --module app.wsgi --workers 2 --threads 2 --harakiri 25 --max-requests 1000 --log-x-forwarded-for --buffer-size 32000
+uwsgi --socket :9000 --workers 4 --master --enable-threads --module app.wsgi
