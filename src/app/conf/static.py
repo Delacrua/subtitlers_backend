@@ -4,4 +4,4 @@ from app.conf.environ import env
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = "/static/static/"
-STATIC_ROOT = env("STATIC_ROOT", cast=str, default="static")
+STATIC_ROOT = env("STATIC_ROOT", cast=str, default="vol/web/static")
