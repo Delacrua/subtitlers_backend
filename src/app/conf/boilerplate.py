@@ -8,3 +8,5 @@ ROOT_URLCONF = "app.urls"
 TEST_RUNNER = "app.test.disable_test_command_runner.DisableTestCommandRunner"
 
 WSGI_APPLICATION = "app.wsgi.application"
+
+SITE_ID = 1
