@@ -10,7 +10,7 @@ class Command(BaseCommand):
         """Entrypoint for command"""
 
         if sbt_models.Genre.objects.count() < len(BASE_GENRES_DATA):
-            self.stdout.write("updating or creating base genres")
+            self.stdout.write("Base genres not found. Updating or creating base genres")
             for genre in BASE_GENRES_DATA:
                 sbt_models.Genre.objects.update_or_create(
                     title=genre.get("title"),
@@ -20,3 +20,5 @@ class Command(BaseCommand):
                         "is_series_genre": genre.get("is_series_genre"),
                     }
                 )
+        else:
+            self.stdout.write("Base genres found, continue.")
