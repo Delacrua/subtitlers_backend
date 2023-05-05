@@ -59,7 +59,7 @@ class CreateFilmService:
         return sbt_models.Word.objects.get_or_create(
             text=word_data.get("text"),
             defaults={
-                "translations": word_data.get("translations", None),
+                "translations": word_data.get("translations", {}),
                 "definition": word_data.get("translations") if word_data.get("translations") else "",
                 "is_uncommon": bool(word_data.get("is_uncommon")),
             },
@@ -83,7 +83,7 @@ class CreateFilmService:
                 phrase_object, created = sbt_models.Phrase.objects.get_or_create(
                     text=phrase_data.get("text"),
                     defaults={
-                        "translations": phrase_data.get("translations", None),
+                        "translations": phrase_data.get("translations", {}),
                         "definition": phrase_data.get("definition") if phrase_data.get("definition") else "",
                         "is_idiom": bool(phrase_data.get("is_idiom")),
                     },
@@ -97,8 +97,8 @@ class CreateFilmService:
                     question_text=question_data.get("question_text"),
                     film=film_object,
                     defaults={
-                        "question_translations": question_data.get("question_translations", None),
-                        "answer_translations": question_data.get("answer_translations", None),
+                        "question_translations": question_data.get("question_translations", {}),
+                        "answer_translations": question_data.get("answer_translations", {}),
                         "answer_text": question_data.get("answer_text") if question_data.get("answer_text") else "",
                     },
                 )
