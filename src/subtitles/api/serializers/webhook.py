@@ -36,6 +36,7 @@ class FilmWebhookSerializer(serializers.Serializer):
     other_titles = serializers.JSONField(allow_null=True)
     released = serializers.IntegerField(allow_null=True)
     duration = serializers.DurationField(allow_null=True)
+    genres = serializers.ListField(allow_null=True)
     difficulty_level = serializers.CharField(allow_blank=True, allow_null=True)
     description = serializers.CharField(allow_blank=True, allow_null=True)
     summary = serializers.CharField(allow_blank=True, allow_null=True)
@@ -47,3 +48,4 @@ class FilmWebhookSerializer(serializers.Serializer):
 class FilmEventWebhookSerializer(serializers.Serializer):
     event = serializers.CharField()
     film_data = FilmWebhookSerializer(many=False)
+
