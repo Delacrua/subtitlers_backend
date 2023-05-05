@@ -49,4 +49,5 @@ urlpatterns = [
     path("", include(series_router.urls)),
     path("", include(seasons_subrouter.urls)),
     path("", include(episodes_subrouter.urls)),
+    path("film_webhook", sbt_viewsets.FilmEventWebhookView.as_view(), name="film-webhook"),
 ]
