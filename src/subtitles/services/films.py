@@ -17,6 +17,7 @@ class CreateFilmService:
         """
         :return: a sbt_models.Film object
         """
+        print(self.film_data)
         film_object, created = self._update_or_create_film_object()
 
         words_data = self.film_data.get("words", {})
@@ -31,7 +32,7 @@ class CreateFilmService:
         if questions_data:
             self._add_questions_to_film(film_object)
 
-        genres_data = self.film_data.get("genres", {})
+        genres_data = self.film_data.get("genres", [])
         if genres_data:
             self._add_genres_to_film(film_object)
 
@@ -103,7 +104,6 @@ class CreateFilmService:
                 )
 
     def _add_genres_to_film(self, film_object: sbt_models.Film) -> None:
-        for genre_data in self.film_data.get("genres", {}):
-            if genre_data:
-                genre_object = sbt_models.Genre.objects.get(title=genre_data.get("title"))
-                film_object.genres.add(genre_object)
+        for genre in self.film_data.get("genres", []):
+            genre_object = sbt_models.Genre.objects.get(title=genre)
+            film_object.genres.add(genre_object)
