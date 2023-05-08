@@ -29,9 +29,5 @@ class FilmEventWebhookView(generics.CreateAPIView):
         if serializer.validated_data.get("event") == "film.created":
             film_data = serializer.validated_data.get("film_data")
             film_object = CreateFilmService(film_data)()
-            return Response(
-                status=status.HTTP_201_CREATED,
-                data=sbt_serializers.FilmSerializer(film_object).data
-            )
+            return Response(status=status.HTTP_201_CREATED, data=sbt_serializers.FilmSerializer(film_object).data)
         return Response(data={"detail": "NOT FOUND"}, status=status.HTTP_404_NOT_FOUND)
-

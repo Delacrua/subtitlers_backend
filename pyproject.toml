@@ -131,6 +131,7 @@ line_length = 120
    "ignore:.*'rest_framework_jwt.blacklist' defines default_app_config.*You can remove default_app_config.::django",
    "ignore:distutils Version classes are deprecated. Use packaging.version instead.:DeprecationWarning:pytest_freezegun:17",
    "ignore:The USE_L10N setting is deprecated.::django",
+   "ignore:The DEFAULT_FILE_STORAGE setting is deprecated.::django",
  ]
  env = [
    "CI=1",

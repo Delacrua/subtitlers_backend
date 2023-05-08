@@ -1,5 +1,6 @@
-from django.contrib.sites.models import Site
 from rest_framework import serializers
+
+from django.contrib.sites.models import Site
 
 from subtitles import models as sbt_models
 
@@ -8,6 +9,7 @@ __all__ = [
     "EpisodeSerializer",
     "SeasonSeralizer",
     "SeriesSerializer",
+    "GenreSerializer",
 ]
 
 
@@ -103,10 +105,10 @@ class FilmSerializer(serializers.ModelSerializer):
 
     def get_words(self, film):  # type: ignore
         return WordSerializer(film.words.all(), many=True, context={"film_instance": film}).data
-    
+
     def get_poster(self, film):  # type: ignore
         if film.poster:
-            url_string = "%s%s" % (Site.objects.get_current().domain, film.poster.url)
+            url_string = f"{Site.objects.get_current().domain}{film.poster.url}"
             return "https://" + url_string.replace("//", "/")
         return None
 

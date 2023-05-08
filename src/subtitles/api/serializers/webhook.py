@@ -48,4 +48,3 @@ class FilmWebhookSerializer(serializers.Serializer):
 class FilmEventWebhookSerializer(serializers.Serializer):
     event = serializers.CharField()
     film_data = FilmWebhookSerializer(many=False)
-

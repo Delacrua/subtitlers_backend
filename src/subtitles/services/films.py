@@ -17,7 +17,6 @@ class CreateFilmService:
         """
         :return: a sbt_models.Film object
         """
-        print(self.film_data)
         film_object, created = self._update_or_create_film_object()
 
         words_data = self.film_data.get("words", {})

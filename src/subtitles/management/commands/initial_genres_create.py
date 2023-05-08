@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+
 from subtitles import models as sbt_models
 from subtitles.services.data.genres_list import BASE_GENRES_DATA
 
@@ -18,7 +19,7 @@ class Command(BaseCommand):
                         "readable": genre.get("readable"),
                         "is_film_genre": genre.get("is_film_genre"),
                         "is_series_genre": genre.get("is_series_genre"),
-                    }
+                    },
                 )
         else:
             self.stdout.write("Base genres found, continue.")
